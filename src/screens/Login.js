@@ -1,24 +1,90 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NoAuth from '../layout/NoAuth'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Alert } from 'react-bootstrap'
+
+const login = {
+    email: 'test@test.com',
+    password: '123456'
+}
+
+const AlertDanger = (props) => {
+    useEffect(() => {
+        return () => {
+            console.log('Unmounting')
+        }
+    }, [])
+
+    return (<Alert variant='danger'>
+        {props.error}
+    </Alert>)
+}
+// let anonyUseEffect
+
+// Login()
+// const unmount = anonyUseEffect()
+
+// if(unmount === function) ? unmount() : null
 
 function Login() {
+    const [checkLogin, setCheckLogin] = useState({
+        isSuccess: false,
+        error: '',
+    })
+
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+    })
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        if (form.email === login.email && login.password === form.password) {
+            setCheckLogin({ isSuccess: true, error: '' })
+            // console.log('Success')
+        } else {
+            setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
+            // console.log('Fail')
+        }
+    }
+
+    console.log('set props & set state');
+
+    useEffect(() => {
+        console.log('useEffect');
+        return () => {
+
+        }
+    }, [])
+
+    console.log('render');
+
     return (
         <NoAuth>
-
-            <Form style={{
-                textAlign: 'left',
-            }}>
-
+            <Form
+                onSubmit={handleSubmit}
+                style={{
+                    textAlign: 'left',
+                }}
+            >
                 <h1 className="h3 mb-3 fw-normal" style={{ textAlign: 'center' }}>Please sign in</h1>
+
+                {/** เช็คเงื่อนไข การแสดงผล */}
+                {checkLogin.isSuccess ? (
+                    <Alert variant='success'>
+                        Login Success
+                    </Alert>
+                ) : !checkLogin.isSuccess && checkLogin.error !== '' ? (
+                    <AlertDanger error={checkLogin.error} />
+                ) : ''}
 
                 <div className="form-floating">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type='text' placeholder='name@example.com' />
+                    <Form.Control type='text' placeholder='name@example.com' onChange={e => { setForm({ ...form, email: e.target.value }) }} />
                 </div>
                 <div className="form-floating">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Password' />
+                    <Form.Control type='password' placeholder='Password' onChange={e => { setForm({ ...form, password: e.target.value }) }} />
                 </div>
 
                 <div className="checkbox mb-3">
@@ -29,7 +95,7 @@ function Login() {
                     </Form.Group>
                     {/* <input type="checkbox" value="remember-me"> Remember me */}
                 </div>
-                <Button variant='primary' block>Sign in</Button>
+                <Button type='submit' variant='primary' block>Sign in</Button>
                 <p className="mt-5 mb-3 text-muted" style={{ textAlign: 'center' }}>© 2017–2021</p>
             </Form>
         </NoAuth>
