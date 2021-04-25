@@ -132,7 +132,7 @@ function Login() {
                             type="checkbox"
                             label="Remember me"
                             checked={rememberMe}
-                            onClick={handleRememberMe}
+                            onChange={handleRememberMe}
                         />
                     </Form.Group>
                     {/* <input type="checkbox" value="remember-me"> Remember me */}
