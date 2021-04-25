@@ -7,16 +7,42 @@ const login = {
     password: '123456'
 }
 
-const AlertDanger = (props) => {
+const AlertLogin = (props) => {
+
     useEffect(() => {
+        console.log('mounting');
         return () => {
-            console.log('Unmounting')
+            console.log('unmounting');
         }
     }, [])
 
-    return (<Alert variant='danger'>
-        {props.error}
-    </Alert>)
+    if (props.isLogin) {
+        return (<Alert variant='success'>
+            Login Success
+        </Alert>)
+    }
+
+    // const a;
+
+    // a === null
+    // null => false
+    // undefined
+
+    // a !== null & a !== undefind
+    // 0 => false
+    // '' => false
+    // false => false
+
+    // a มีค่าข้างในตัวแปรที่ไม่ใช่ null,0,'',false
+
+
+    if (!props.isLogin && props.error) {
+        return (<Alert variant='danger'>
+            {props.error}
+        </Alert>)
+    }
+
+    return (<></>)
 }
 // let anonyUseEffect
 
@@ -48,16 +74,16 @@ function Login() {
         }
     }
 
-    console.log('set props & set state');
+    // console.log('set props & set state');
 
     useEffect(() => {
-        console.log('useEffect');
+        // console.log('useEffect');
         return () => {
 
         }
     }, [])
 
-    console.log('render');
+    // console.log('render');
 
     return (
         <NoAuth>
@@ -68,15 +94,9 @@ function Login() {
                 }}
             >
                 <h1 className="h3 mb-3 fw-normal" style={{ textAlign: 'center' }}>Please sign in</h1>
-
                 {/** เช็คเงื่อนไข การแสดงผล */}
-                {checkLogin.isSuccess ? (
-                    <Alert variant='success'>
-                        Login Success
-                    </Alert>
-                ) : !checkLogin.isSuccess && checkLogin.error !== '' ? (
-                    <AlertDanger error={checkLogin.error} />
-                ) : ''}
+                <AlertLogin isLogin={checkLogin.isSuccess} error={checkLogin.error} />
+
 
                 <div className="form-floating">
                     <Form.Label>Email address</Form.Label>
