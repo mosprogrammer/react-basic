@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NoAuth from '../layout/NoAuth'
 import { Form, Button, Alert } from 'react-bootstrap'
+import { useForm } from 'react-hook-form'
 
 const login = {
     email: 'test@test.com',
@@ -52,52 +53,29 @@ const AlertLogin = (props) => {
 // if(unmount === function) ? unmount() : null
 
 function Login() {
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+
+    const [rememberMe, setRememberMe] = useState(false)
+
     const [checkLogin, setCheckLogin] = useState({
         isSuccess: false,
         error: '',
     })
 
-    const [form, setForm] = useState({
-        email: '',
-        password: '',
-        remember: false,
-    })
+    console.log(errors)
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-
-        if (form.email === login.email && login.password === form.password) {
+    const onSubmit = (data) => {
+        if (data.email === login.email && login.password === data.password) {
             setCheckLogin({ isSuccess: true, error: '' })
-            // console.log('Success')
         } else {
             setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
-            // console.log('Fail')
         }
-
-        setForm({
-            email: '',
-            password: '',
-            remember: false,
-        })
-    }
-
-    const handleChangeForm = (name) => {
-        return (e) => {
-            setForm({ ...form, [name]: e.target.value })
-        }
+        reset()
     }
 
     const handleRememberMe = () => {
-        setForm({ ...form, remember: !form.remember })
+        setRememberMe(!rememberMe)
     }
-
-    // const handleChangeUsername = (e) => {
-    //     setForm({ ...form, email: e.target.value })
-    // }
-
-    // const handleChangePassword = (e) => {
-    //     setForm({ ...form, password: e.target.value })
-    // }
 
     // console.log('set props & set state');
 
@@ -113,7 +91,7 @@ function Login() {
     return (
         <NoAuth>
             <Form
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 style={{
                     textAlign: 'left',
                 }}
@@ -126,20 +104,24 @@ function Login() {
                 <div className="form-floating">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
+                        {...register('email', {
+                            required: true,
+                        })}
                         type='text'
                         placeholder='name@example.com'
-                        value={form.email}
-                        onChange={handleChangeForm('email')}
                     />
+                    {errors?.email?.type === 'required' && <p style={{ color: 'red' }}>กรุณาระบุ username</p>}
                 </div>
                 <div className="form-floating">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
+                        {...register('password', {
+                            required: true,
+                        })}
                         type='password'
                         placeholder='Password'
-                        value={form.password}
-                        onChange={handleChangeForm('password')}
                     />
+                    {errors?.password?.type === 'required' && <p style={{ color: 'red' }}>กรุณาระบุ password</p>}
                 </div>
 
                 <div className="checkbox mb-3">
@@ -149,7 +131,7 @@ function Login() {
                         <Form.Check
                             type="checkbox"
                             label="Remember me"
-                            checked={form.remember}
+                            checked={rememberMe}
                             onClick={handleRememberMe}
                         />
                     </Form.Group>
