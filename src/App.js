@@ -11,19 +11,23 @@ import Users from './screens/Users'
 import Login from './screens/Login'
 
 export default function App() {
+  // const [expanded, setExpanded] = useState(false)
+
   return (
     <Router>
       {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
       <Switch>
-        <Route path="/about" children={About} />
+        <Route path="/about">
+          <About />
+        </Route>
         <Route path="/users">
           <Users />
         </Route>
         <Route path='/login'>
           <Login />
         </Route>
-        <Route path="/">
+        <Route path="/" >
           <Home />
         </Route>
       </Switch>

@@ -1,19 +1,47 @@
-import { useEffect } from "react";
+import {
+    createContext,
+    useReducer,
+} from 'react'
 
-let userData
-
-function Store(setState) {
-
-    useEffect(() => {
-
-        if (!userData) {
-            //call api เพื่อเอาข้อมูล user
-
-            //userData = ข้อมูลที่มาจาก api   
-        }
-    }, [])
+const initialState = {
+    navbar: {
+        expanded: false
+    }
 }
 
-export const user = userData
+const reducer = (state, data) => {
 
-export const store = Store
+    // console.log('reducer', state, data);
+
+    switch (data.action) {
+        case 'TOGGLE_NAVBAR':
+            return {
+                ...state,
+                navbar: {
+                    ...state.navbar,
+                    expanded: data.payload.expanded,
+                },
+            }
+        default:
+            return state
+    }
+}
+
+export const actions = {
+    toggleNavbar(expanded) {
+        return {
+            action: 'TOGGLE_NAVBAR',
+            payload: { expanded }
+        }
+    }
+}
+
+export const Context = createContext(initialState)
+
+export const ContextProvider = (props) => {
+    const [value, dispatch] = useReducer(reducer, initialState)
+
+    return (
+        <Context.Provider value={{ value, dispatch }}>{props.children}</Context.Provider>
+    )
+}

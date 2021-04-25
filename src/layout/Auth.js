@@ -1,11 +1,32 @@
-import React from 'react'
-import { Button, Form, FormControl, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import React, { useContext, useEffect } from 'react'
+import { Button, Form, FormControl, Image, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import logo from '../logo.svg'
+import { Context, actions } from '../store'
 
 function Auth(props) {
+    const { value, dispatch } = useContext(Context)
+
+    // console.log('layout auth', value)
+
+    const user = {
+        username: 'React Basic',
+        logo,
+    }
+
+    // const [expanded, setExpanded] = useState(false)
+
+    const handleToggle = () => {
+        dispatch(actions.toggleNavbar(!value.navbar.expanded))
+    }
+
+    useEffect(() => {
+        console.log('didmount layout')
+    }, [])
+
     return (
         <div>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="light" expand="lg" expanded={value.navbar.expanded} onToggle={handleToggle}>
                 <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -30,9 +51,11 @@ function Auth(props) {
                     <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                         <Button variant="outline-success">Search</Button>
-                        <Link to='/login'>
+                        <Image src={user.logo} roundedCircle width='64px' height='64px' />
+                        <span>{user.username}</span>
+                        {/* <Link to='/login'>
                             <Button variant="link">Login</Button>
-                        </Link>
+                        </Link> */}
                     </Form>
                 </Navbar.Collapse>
             </Navbar>
