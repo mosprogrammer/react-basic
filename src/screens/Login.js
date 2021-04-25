@@ -60,6 +60,7 @@ function Login() {
     const [form, setForm] = useState({
         email: '',
         password: '',
+        remember: false,
     })
 
     const handleSubmit = (event) => {
@@ -72,7 +73,31 @@ function Login() {
             setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
             // console.log('Fail')
         }
+
+        setForm({
+            email: '',
+            password: '',
+            remember: false,
+        })
     }
+
+    const handleChangeForm = (name) => {
+        return (e) => {
+            setForm({ ...form, [name]: e.target.value })
+        }
+    }
+
+    const handleRememberMe = () => {
+        setForm({ ...form, remember: !form.remember })
+    }
+
+    // const handleChangeUsername = (e) => {
+    //     setForm({ ...form, email: e.target.value })
+    // }
+
+    // const handleChangePassword = (e) => {
+    //     setForm({ ...form, password: e.target.value })
+    // }
 
     // console.log('set props & set state');
 
@@ -100,18 +125,33 @@ function Login() {
 
                 <div className="form-floating">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type='text' placeholder='name@example.com' onChange={e => { setForm({ ...form, email: e.target.value }) }} />
+                    <Form.Control
+                        type='text'
+                        placeholder='name@example.com'
+                        value={form.email}
+                        onChange={handleChangeForm('email')}
+                    />
                 </div>
                 <div className="form-floating">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Password' onChange={e => { setForm({ ...form, password: e.target.value }) }} />
+                    <Form.Control
+                        type='password'
+                        placeholder='Password'
+                        value={form.password}
+                        onChange={handleChangeForm('password')}
+                    />
                 </div>
 
                 <div className="checkbox mb-3">
                     <Form.Group controlId="formBasicCheckbox" style={{
                         textAlign: 'center'
                     }}>
-                        <Form.Check type="checkbox" label="Remember me" />
+                        <Form.Check
+                            type="checkbox"
+                            label="Remember me"
+                            checked={form.remember}
+                            onClick={handleRememberMe}
+                        />
                     </Form.Group>
                     {/* <input type="checkbox" value="remember-me"> Remember me */}
                 </div>
