@@ -9,6 +9,7 @@ import About from './screens/About'
 import Home from './screens/Home'
 import Users from './screens/Users'
 import Login from './screens/Login'
+import Register from './screens/Register'
 
 export default function App() {
   // const [expanded, setExpanded] = useState(false)
@@ -26,6 +27,9 @@ export default function App() {
         </Route>
         <Route path='/login'>
           <Login />
+        </Route>
+        <Route path='/register'>
+          <Register />
         </Route>
         <Route path="/" >
           <Home />
