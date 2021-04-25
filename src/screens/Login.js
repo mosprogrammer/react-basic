@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NoAuth from '../layout/NoAuth'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-
-const login = {
-    email: 'test@test.com',
-    password: '123456'
-}
+import * as api from '../api/auth'
+import { useHistory } from 'react-router'
+import { Context, actions } from '../store'
 
 const AlertLogin = (props) => {
-
     useEffect(() => {
         console.log('mounting');
         return () => {
@@ -18,9 +15,11 @@ const AlertLogin = (props) => {
     }, [])
 
     if (props.isLogin) {
-        return (<Alert variant='success'>
-            Login Success
-        </Alert>)
+        return (
+            <Alert variant='success'>
+                Login Success
+            </Alert>
+        )
     }
 
     // const a;
@@ -35,7 +34,6 @@ const AlertLogin = (props) => {
     // false => false
 
     // a มีค่าข้างในตัวแปรที่ไม่ใช่ null,0,'',false
-
 
     if (!props.isLogin && props.error) {
         return (<Alert variant='danger'>
@@ -53,6 +51,9 @@ const AlertLogin = (props) => {
 // if(unmount === function) ? unmount() : null
 
 function Login() {
+    const { dispatch } = useContext(Context)
+
+    const history = useHistory()
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
     const [rememberMe, setRememberMe] = useState(false)
@@ -65,26 +66,24 @@ function Login() {
     console.log(errors)
 
     const onSubmit = (data) => {
-        if (data.email === login.email && login.password === data.password) {
+
+        api.login(data.email, data.password).then(res => {
+
+            // console.log(res.data)
+
+            dispatch(actions.login(res.data?.result?.user, res.data?.result?.token, res.data?.result?.expired))
+
             setCheckLogin({ isSuccess: true, error: '' })
-        } else {
+            reset()
+            history.push('/')
+        }).catch(err => {
             setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
-        }
-        reset()
+        })
     }
 
     const handleRememberMe = () => {
         setRememberMe(!rememberMe)
     }
-
-    // console.log('set props & set state');
-
-    useEffect(() => {
-        // console.log('useEffect');
-        return () => {
-
-        }
-    }, [])
 
     // console.log('render');
 

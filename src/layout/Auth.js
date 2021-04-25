@@ -31,13 +31,13 @@ function Auth(props) {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link>
+                        <Nav.Link as='div'>
                             <Link to="/">Home</Link>
                         </Nav.Link>
-                        <Nav.Link >
+                        <Nav.Link as='div'>
                             <Link to="/about">About</Link>
                         </Nav.Link>
-                        <Nav.Link >
+                        <Nav.Link as='div'>
                             <Link to="/users">Users</Link>
                         </Nav.Link>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
